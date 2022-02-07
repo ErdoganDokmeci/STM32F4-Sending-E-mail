@@ -17,9 +17,9 @@
 uint8_t main_buffer[MAIN_BUFFER_SIZE] = {0};
 
 typedef struct {
-		unsigned char buffer[UART_BUFFER_SIZE];
-		volatile uint16_t head;
-		volatile uint16_t tail;
+	unsigned char buffer[UART_BUFFER_SIZE];
+	volatile uint16_t head;
+	volatile uint16_t tail;
 } ring_buffer;
 
 
@@ -54,7 +54,7 @@ void Ringbuf_init_Uart4(void);
 // Ring Buffer Functions
 /* reads the data in the rx_buffer and increment the tail count in rx_buffer */
 int Uart_read_Usart2(void);		// USART2
-int Uart_read(void);					// UART4
+int Uart_read(void);			// UART4
 
 void store_char(unsigned char c, ring_buffer *buffer);
 void Uart_write_Usart2(int c);
@@ -76,11 +76,11 @@ void delayMs(int n);
 
 int main(void) {
 	__disable_irq();
-	USART2_init();          				// initialize USART2	
-	UART4_init(); 									// Initialize UART4 for ESP-01 data
+	USART2_init();          		// initialize USART2	
+	UART4_init(); 				// Initialize UART4 for ESP-01 data
 	NVIC_EnableIRQ(USART2_IRQn);		// enable interrupt in NVIC
-	NVIC_EnableIRQ(UART4_IRQn);			// enable interrupt in NVIC			
-	__enable_irq();									// global enable IRQs
+	NVIC_EnableIRQ(UART4_IRQn);		// enable interrupt in NVIC			
+	__enable_irq();				// global enable IRQs
 	connect_smtp2go_send_mail();		// connect to Wi-Fi/smtp2go and send mail
 		
 	while(1) {     	
@@ -95,7 +95,7 @@ void delayMs(int n) {
 	for(i = 0; i < n; i++) {
 		while((SysTick->CTRL & 0x10000) == 0);	// Wait until the COUNTFLAG is set
 		}
-	SysTick->CTRL = 0;										// Stop the timer
+	SysTick->CTRL = 0;				// Stop the timer
 }
 
 
@@ -104,7 +104,7 @@ void USART2_IRQHandler(void) {
 	if ((USART2->SR & 0x0020) && (USART2->CR1 & 0x0020)) {
 		uint8_t data;
 		data = USART2->DR;
-		store_char (data, _rx_buffer2);			// store data in buffer					
+		store_char (data, _rx_buffer2);		// store data in buffer					
     return;			
 	}
 			
@@ -259,34 +259,34 @@ void store_char(unsigned char c, ring_buffer *buffer) {
 		// current location of the tail), we're about to overflow the buffer
 		// and so we don't write the character or advance the head.
 		if (i != buffer->tail) {
-				buffer->buffer[buffer->head] = c;
-				buffer->head = i;
+			buffer->buffer[buffer->head] = c;
+			buffer->head = i;
 		}
 }
 
 
 int Uart_read(void) {
-		// if the head isn't ahead of the tail, we don't have any characters
-		if (_rx_buffer->head == _rx_buffer->tail) {
-				return -1;
-		}
-		else {
-				unsigned char c = _rx_buffer->buffer[_rx_buffer->tail];
-				_rx_buffer->tail = (uint16_t)(_rx_buffer->tail + 1) % UART_BUFFER_SIZE;
+	// if the head isn't ahead of the tail, we don't have any characters
+	if (_rx_buffer->head == _rx_buffer->tail) {
+		return -1;
+	}
+	else {
+		unsigned char c = _rx_buffer->buffer[_rx_buffer->tail];
+		_rx_buffer->tail = (uint16_t)(_rx_buffer->tail + 1) % UART_BUFFER_SIZE;
 				return c;
-		}
+	}
 }
 
 
 int Uart_read_Usart2(void) {
 		// if the head isn't ahead of the tail, we don't have any characters
 		if(_rx_buffer2->head == _rx_buffer2->tail) {
-				return -1;
+			return -1;
 		}
 		else {
-				unsigned char c = _rx_buffer2->buffer[_rx_buffer2->tail];
-				_rx_buffer2->tail = (uint16_t)(_rx_buffer2->tail + 1) % UART_BUFFER_SIZE;
-				return c;
+			unsigned char c = _rx_buffer2->buffer[_rx_buffer2->tail];
+			_rx_buffer2->tail = (uint16_t)(_rx_buffer2->tail + 1) % UART_BUFFER_SIZE;
+			return c;
 		}
 }
 
