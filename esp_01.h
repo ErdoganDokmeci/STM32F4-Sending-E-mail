@@ -1,6 +1,4 @@
 #include "stm32f4xx.h"
-//#include "uart.h"
-
 
 #define MAIN_BUFFER_SIZE 	256
 #define WIFI_SSID 				"xxxxxxxxxxxxx"
