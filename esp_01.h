@@ -1,8 +1,8 @@
 #include "stm32f4xx.h"
 
 #define MAIN_BUFFER_SIZE 	256
-#define WIFI_SSID 				"xxxxxxxxxxxxx"
-#define WIFI_PSWD 				"xxxxxxxxx"
+#define WIFI_SSID 		"xxxxxxxxxxxxx"
+#define WIFI_PSWD 		"xxxxxxxxx"
 #define MAIL_ID						"xxxxxxxxx"
 #define MAIL_PSWD					"xxxxxxxxx"
 #define MAIL_FROM					"xxxxxxxxx"
